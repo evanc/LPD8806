@@ -79,7 +79,12 @@ LPD8806::LPD8806(uint16_t n) {
 }
 
 // Constructor for use with arbitrary clock/data pins:
-LPD8806::LPD8806(uint16_t n, uint8_t dpin, uint8_t cpin) {
+LPD8806::LPD8806(int w, int h, uint16_t n, uint8_t dpin, uint8_t cpin) {
+  constructor(w, h);
+  
+  width = w;
+  height = h;
+  
   pixels = NULL;
   begun  = false;
   updateLength(n);
@@ -293,4 +298,20 @@ uint32_t LPD8806::getPixelColor(uint16_t n) {
   }
 
   return 0; // Pixel # is out of bounds
+}
+
+void LPD8806::drawPixel(int16_t x, int16_t y, uint16_t c) {
+	uint8_t r, g, b;
+	
+	r = ((c >> 11) & 0x1F) * 0xFF / 0x1F;
+	g = ((c >> 5) & 0x3F) * 0xFF / 0x3F;
+	b = (c & 0x1F) * 0xFF / 0x1F;
+	
+	uint16_t pixel = (x % width) + ((height - 1 - y) * width);
+	uint32_t oldColor = getPixelColor(pixel);
+	
+	uint32_t color = Color(r, g, b);
+	
+	setPixelColor(pixel, color);
+	
 }

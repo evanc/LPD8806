@@ -4,12 +4,16 @@
  #include <WProgram.h>
  #include <pins_arduino.h>
 #endif
+#include "Adafruit_GFX.h"
 
-class LPD8806 {
+class LPD8806 : public Adafruit_GFX {
 
  public:
-
-  LPD8806(uint16_t n, uint8_t dpin, uint8_t cpin); // Configurable pins
+ 
+	int width;
+	int height;
+	
+  LPD8806(int w, int h, uint16_t n, uint8_t dpin, uint8_t cpin); // Configurable pins
   LPD8806(uint16_t n); // Use SPI hardware; specific pins only
   LPD8806(void); // Empty constructor; init pins & strip length later
   void
@@ -19,7 +23,9 @@ class LPD8806 {
     setPixelColor(uint16_t n, uint32_t c),
     updatePins(uint8_t dpin, uint8_t cpin), // Change pins, configurable
     updatePins(void),                       // Change pins, hardware SPI
-    updateLength(uint16_t n);               // Change strip length
+    updateLength(uint16_t n),               // Change strip length
+    drawPixel(int16_t x, int16_t y, uint16_t c),
+    updateDisplay(void);
   uint16_t
     numPixels(void);
   uint32_t
